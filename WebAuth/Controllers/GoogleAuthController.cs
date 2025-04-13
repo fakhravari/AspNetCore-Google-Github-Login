@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebAuth.Controllers
 {
@@ -39,9 +40,13 @@ namespace WebAuth.Controllers
                 return BadRequest($"Authentication failed: {error}");
             }
 
-            var claims = result.Principal.Claims.Select(v => new { Value = v.Value, Key = v.ValueType.ToString() }).ToList();
+            var Name = result.Principal.FindFirst(ClaimTypes.Name).Value;
+            var Email = result.Principal.FindFirst(ClaimTypes.Email).Value;
+            var NameIdentifier = result.Principal.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var GivenName = User.FindFirst(ClaimTypes.GivenName)?.Value;
+            var Surname = User.FindFirst(ClaimTypes.Surname)?.Value;
 
-            return Json(claims);
+            return Json(new { Name, Email, NameIdentifier, GivenName, Surname });
         }
     }
 }

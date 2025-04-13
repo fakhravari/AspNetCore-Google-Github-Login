@@ -12,12 +12,12 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie(options =>
 {
-    //options.Cookie.Name = "Fakhravari.Ir";
-    //options.LoginPath = "/Authentication/Signin";
-    //options.LogoutPath = "/Authentication/Logout";
+    options.Cookie.Name = "Fakhravari.Ir";
+    options.LoginPath = "/Authentication/Signin";
+    options.LogoutPath = "/Authentication/Logout";
 
-    //options.Cookie.SameSite = SameSiteMode.None;
-    //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 })
 .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
 {
@@ -25,11 +25,6 @@ builder.Services.AddAuthentication(options =>
 
     options.ClientId = config["ClientId"];
     options.ClientSecret = config["ClientSecret"];
-    options.SaveTokens = true;
-
-    options.Scope.Add("openid");
-    options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
-    options.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
 });
 
 builder.Services.AddControllersWithViews();
