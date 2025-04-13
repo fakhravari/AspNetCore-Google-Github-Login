@@ -8,17 +8,9 @@ namespace WebAuth.Controllers
     [Route("auth/google")]
     public class GoogleAuthController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        public GoogleAuthController(IHttpClientFactory httpClientFactory)
-        {
-            _httpClientFactory = httpClientFactory;
-        }
-
         [HttpGet("login")]
         public IActionResult Login()
         {
-            var stateValue = Guid.NewGuid().ToString();
-
             var properties = new AuthenticationProperties
             {
                 RedirectUri = Url.Action("Callback", "GoogleAuth", null, Request.Scheme),

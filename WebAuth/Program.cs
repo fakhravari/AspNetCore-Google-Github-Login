@@ -25,6 +25,15 @@ builder.Services.AddAuthentication(options =>
 
     options.ClientId = config["ClientId"];
     options.ClientSecret = config["ClientSecret"];
+}).AddGitHub("GitHub", options =>
+{
+    var config = builder.Configuration.GetSection("Authentication:Github");
+
+    options.ClientId = config["ClientId"];
+    options.ClientSecret = config["ClientSecret"];
+    //options.CallbackPath = "/signin-github";
+
+    options.Scope.Add("user:email");
 });
 
 builder.Services.AddControllersWithViews();
