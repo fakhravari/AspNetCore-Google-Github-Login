@@ -1,59 +1,35 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDataProtection()
-    .SetApplicationName("Fakhravari.Ir")
-    .PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "keys")))
-    .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
-
-
+builder.Services.AddDataProtection().SetApplicationName("Fakhravari.Ir").PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(builder.Environment.ContentRootPath, "keys"))).SetDefaultKeyLifetime(TimeSpan.FromDays(30));
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
 })
 .AddCookie(options =>
 {
-    options.Cookie.Name = "Fakhravari.Ir";
-    options.LoginPath = "/Authentication/Signin";
-    options.LogoutPath = "/Authentication/Logout";
+    //options.Cookie.Name = "Fakhravari.Ir";
+    //options.LoginPath = "/Authentication/Signin";
+    //options.LogoutPath = "/Authentication/Logout";
 
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // مهم
-    options.Cookie.SameSite = SameSiteMode.None; // مهم
+    //options.Cookie.SameSite = SameSiteMode.None;
+    //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 })
-.AddGoogle(options =>
+.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
 {
     var config = builder.Configuration.GetSection("Authentication:Google");
 
     options.ClientId = config["ClientId"];
     options.ClientSecret = config["ClientSecret"];
-    options.CallbackPath = config["CallBack"];
     options.SaveTokens = true;
 
     options.Scope.Add("openid");
     options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
     options.Scope.Add("https://www.googleapis.com/auth/userinfo.email");
-
-    options.Events = new OAuthEvents
-    {
-        OnRedirectToAuthorizationEndpoint = context =>
-        {
-            var uri = context.RedirectUri;
-            var newUri = QueryHelpers.AddQueryString(uri, new Dictionary<string, string>
-            {
-                { "prompt", "consent select_account" }
-            });
-
-            context.Response.Redirect(newUri);
-            return Task.CompletedTask;
-        }
-    };
 });
 
 builder.Services.AddControllersWithViews();
@@ -83,9 +59,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseRequestLocalization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 app.Run();
