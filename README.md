@@ -1,4 +1,4 @@
-Login using Google and GitHub accounts
+Login using Google and GitHub and Microsoft accounts
 <br>
 https://auth.fakhravari.ir/
 <br>
