@@ -5,19 +5,19 @@ using System.Security.Claims;
 
 namespace WebAuth.Controllers
 {
-    [Route("auth/google")]
-    public class GoogleAuthController : Controller
+    [Route("auth/microsoft")]
+    public class MicrosoftAuthController : Controller
     {
         [HttpGet("login")]
         public IActionResult Login()
         {
             var properties = new AuthenticationProperties
             {
-                RedirectUri = Url.Action("Callback", "GoogleAuth", null, Request.Scheme),
+                RedirectUri = Url.Action("Callback", "MicrosoftAuth", null, Request.Scheme),
                 Items = { { "prompt", "select_account" } }
             };
 
-            return Challenge(properties, "Google");
+            return Challenge(properties, "Microsoft");
         }
 
         [HttpGet("callback")]

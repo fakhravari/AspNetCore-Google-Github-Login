@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.FileProviders;
 
@@ -19,21 +18,21 @@ builder.Services.AddAuthentication(options =>
     options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 })
-.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+.AddGoogle("Google", options =>
 {
     var config = builder.Configuration.GetSection("Authentication:Google");
-
     options.ClientId = config["ClientId"];
     options.ClientSecret = config["ClientSecret"];
 }).AddGitHub("GitHub", options =>
 {
     var config = builder.Configuration.GetSection("Authentication:Github");
-
     options.ClientId = config["ClientId"];
     options.ClientSecret = config["ClientSecret"];
-    //options.CallbackPath = "/signin-github";
-
-    options.Scope.Add("user:email");
+}).AddMicrosoftAccount("Microsoft", options =>
+{
+    var config = builder.Configuration.GetSection("Authentication:Microsoft");
+    options.ClientId = config["ClientId"];
+    options.ClientSecret = config["ClientSecret"];
 });
 
 builder.Services.AddControllersWithViews();
