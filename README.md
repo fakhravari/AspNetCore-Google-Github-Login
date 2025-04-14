@@ -8,7 +8,6 @@ https://console.cloud.google.com/auth/  To > Clients
 <br>
 https://github.com/settings/applications/new
 <br>
-<br>
 https://portal.azure.com/ > Azure Active Directory > App registrations > New registration
 <br>
 <br>
